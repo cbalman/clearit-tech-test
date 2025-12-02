@@ -13,6 +13,7 @@ class DocumentRequestedNotification extends Notification
     use Queueable;
 
     public $ticket;
+    public $agentName;
 
     /**
      * Create a new notification instance.
@@ -20,9 +21,10 @@ class DocumentRequestedNotification extends Notification
      * @param Ticket $ticket
      * @return void
      */
-    public function __construct(Ticket $ticket)
+    public function __construct(Ticket $ticket, $agentName)
     {
         $this->ticket = $ticket;
+        $this->agentName = $agentName;
     }
 
     /**
@@ -46,7 +48,7 @@ class DocumentRequestedNotification extends Notification
     {
         return (new MailMessage)
             ->subject('Action Required: Documents Requested for Ticket #' . $this->ticket->id)
-            ->line('The assigned agent has reviewed your ticket and is requesting additional documentation.')
+            ->line('Agent ' . $this->agentName . ' has reviewed your ticket and is requesting additional documentation.')
             ->line('Please upload the necessary files to proceed with the clearance process.')
             ->action('Upload Documents', url('/tickets/' . $this->ticket->id))
             ->line('Thank you for your cooperation.');
@@ -63,7 +65,7 @@ class DocumentRequestedNotification extends Notification
         return [
             'ticket_id' => $this->ticket->id,
             'title' => 'Documents Requested',
-            'message' => 'Agent ' . $this->ticket->agent->name . ' has requested documents for Ticket #' . $this->ticket->id . '.',
+            'message' => 'Agent ' . $this->agentName . ' has requested documents for Ticket #' . $this->ticket->id . '.',
             'status' => 'in_progress'
         ];
     }

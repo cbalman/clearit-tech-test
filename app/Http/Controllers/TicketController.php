@@ -113,8 +113,10 @@ class TicketController extends Controller
             $ticket->save();
         }
 
+        $agentName = Auth::user()->name; // <--- OBTENEMOS EL NOMBRE DEL AGENTE AUTENTICADO
+
         // 2. Send notification to the user (creator of the ticket)
-        $ticket->creator->notify(new DocumentRequestedNotification($ticket));
+        $ticket->creator->notify(new DocumentRequestedNotification($ticket, $agentName));
 
         return back()->with('success', 'Document request sent successfully to the user.');
     }

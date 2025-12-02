@@ -9,8 +9,17 @@ class Ticket extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id','name','type','transport','product','origin_country','destination_country','status'];
-
+    protected $fillable = [
+        'user_id',
+        'agent_id',
+        'ticket_name',
+        'ticket_type',
+        'mode_of_transport',
+        'product',
+        'country_origin',
+        'country_destination',
+        'status'
+    ];
     public function documents()
     {
         return $this->hasMany(Document::class);
